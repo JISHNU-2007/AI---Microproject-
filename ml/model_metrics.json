@@ -1,0 +1,45 @@
+{
+  "best_model": "Logistic Regression",
+  "precision": 1.0,
+  "recall": 1.0,
+  "f1": 1.0,
+  "roc_auc": 1.0,
+  "pr_auc": 1.0,
+  "confusion_matrix": [
+    [
+      19700,
+      0
+    ],
+    [
+      0,
+      300
+    ]
+  ],
+  "top_features": [],
+  "models_compared": [
+    {
+      "name": "Logistic Regression",
+      "f1": 1.0,
+      "pr_auc": 1.0,
+      "roc_auc": 1.0
+    },
+    {
+      "name": "Random Forest",
+      "f1": 1.0,
+      "pr_auc": 1.0,
+      "roc_auc": 1.0
+    },
+    {
+      "name": "XGBoost",
+      "f1": 1.0,
+      "pr_auc": 1.0,
+      "roc_auc": 1.0
+    },
+    {
+      "name": "IsolationForest",
+      "f1": 0.6381,
+      "pr_auc": 0.6978,
+      "roc_auc": 0.9775
+    }
+  ]
+}

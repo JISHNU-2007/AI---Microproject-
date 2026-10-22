@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SecureBank | AI Fraud Detection</title>
+  <link rel="stylesheet" href="style.css">
+  <!-- Auth guard: runs before body renders -->
+  <script>
+    (function(){
+      var ok = localStorage.getItem('sb-admin-auth')==='1'
+               || sessionStorage.getItem('sb-admin-auth')==='1';
+      if(!ok) window.location.replace('login.html');
+    })();
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+  <aside class="sidebar">
+    <div class="brand">
+      <div class="brand-mark">S</div>
+      <div><strong>SecureBank</strong><span>Fraud Intelligence</span></div>
+    </div>
+    <nav>
+      <a class="active" href="#dashboard">Overview</a>
+      <a href="#transactions">Transactions</a>
+      <a href="#analytics">Analytics</a>
+      <a href="#models">AI Models</a>
+      <a href="#explainability">Explainability</a>
+    </nav>
+    <div class="system-card">
+      <span class="pulse"></span>
+      <div><b>Protection active</b><small>Real-time scoring online</small></div>
+    </div>
+  </aside>
+
+  <main>
+    <header class="topbar">
+      <div>
+        <div class="eyebrow">RISK OPERATIONS</div>
+        <h1>Fraud Detection Center</h1>
+      </div>
+      <div class="top-actions">
+        <button class="icon-btn">⌕</button>
+        <button class="icon-btn">◔</button>
+        <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark/light mode" title="Toggle dark/light mode">
+          <span class="toggle-icon">
+            <span class="toggle-sun">☀️</span>
+            <span class="toggle-moon">🌙</span>
+          </span>
+        </button>
+        <div class="profile"><div class="avatar">AI</div><span>Security Admin</span></div>
+        <button class="logout-btn" id="logoutBtn" title="Sign out" aria-label="Sign out">⏻ Logout</button>
+      </div>
+    </header>
+
+    <section id="dashboard" class="content">
+      <div class="hero">
+        <div>
+          <span class="tag">AI-POWERED MONITORING</span>
+          <h2>Protect every transaction with intelligent risk scoring.</h2>
+          <p>Machine learning detects unusual patterns across transaction velocity, location, device and spending behavior while keeping decisions explainable.</p>
+        </div>
+        <button class="primary" onclick="scrollToSection('transactions')">Review transactions →</button>
+      </div>
+
+      <div class="stats">
+        <div class="stat"><span>Transactions monitored</span><strong>128,492</strong><em class="up">+8.4% today</em></div>
+        <div class="stat"><span>High-risk alerts</span><strong>184</strong><em class="down">−12.6% today</em></div>
+        <div class="stat"><span>Detection precision</span><strong>96.8%</strong><em>Model evaluation</em></div>
+        <div class="stat"><span>Avg. scoring time</span><strong>42 ms</strong><em>Real-time API</em></div>
+      </div>
+
+      <div class="grid two">
+        <section class="panel">
+          <div class="panel-head"><div><h3>Risk activity</h3><p>Transaction volume and detected anomalies</p></div><select id="range"><option>Last 24 hours</option><option>Last 7 days</option></select></div>
+          <canvas id="riskChart"></canvas>
+        </section>
+        <section class="panel">
+          <div class="panel-head"><div><h3>Risk distribution</h3><p>Current transaction scoring</p></div></div>
+          <div class="risk-layout">
+            <canvas id="donutChart"></canvas>
+            <div class="legend">
+              <div><i class="low"></i><span>Low risk</span><b>91.4%</b></div>
+              <div><i class="medium"></i><span>Review</span><b>7.2%</b></div>
+              <div><i class="high"></i><span>High risk</span><b>1.4%</b></div>
+            </div>
+          </div>
+        </section>
+      </div>
+
+      <section id="transactions" class="panel">
+        <div class="panel-head">
+          <div><h3>Live transaction queue</h3><p>AI-ranked transactions requiring attention</p></div>
+          <button class="secondary" onclick="simulateTransaction()">+ Simulate transaction</button>
+        </div>
+        <div class="filters">
+          <input id="search" placeholder="Search transaction ID, merchant or channel..." oninput="filterRows()">
+          <select id="riskFilter" onchange="filterRows()"><option value="all">All risk levels</option><option value="High">High risk</option><option value="Review">Review</option><option value="Low">Low risk</option></select>
+          <button class="secondary" onclick="filterRows()">Filter</button>
+        </div>
+        <div class="table-wrap">
+          <table><thead><tr><th>Transaction</th><th>Channel</th><th>Amount</th><th>Risk score</th><th>Decision</th><th>Signal</th></tr></thead>
+          <tbody id="transactionBody">
+            <tr><td><b>TXN-84A21</b><small>2 min ago</small></td><td>Card</td><td>₹84,500</td><td><span class="score high-score">0.94</span></td><td><span class="badge high-badge">Blocked</span></td><td>Unusual velocity</td></tr>
+            <tr><td><b>TXN-84A20</b><small>4 min ago</small></td><td>UPI</td><td>₹18,200</td><td><span class="score review-score">0.71</span></td><td><span class="badge review-badge">Review</span></td><td>Location deviation</td></tr>
+            <tr><td><b>TXN-84A19</b><small>5 min ago</small></td><td>Card</td><td>₹4,850</td><td><span class="score low-score">0.12</span></td><td><span class="badge low-badge">Approved</span></td><td>Normal behavior</td></tr>
+            <tr><td><b>TXN-84A18</b><small>8 min ago</small></td><td>Wallet</td><td>₹32,700</td><td><span class="score review-score">0.68</span></td><td><span class="badge review-badge">Review</span></td><td>Device mismatch</td></tr>
+            <tr><td><b>TXN-84A17</b><small>11 min ago</small></td><td>UPI</td><td>₹2,100</td><td><span class="score low-score">0.08</span></td><td><span class="badge low-badge">Approved</span></td><td>Normal behavior</td></tr>
+          </tbody></table>
+        </div>
+      </section>
+
+      <div class="grid two">
+        <section id="analytics" class="panel">
+          <div class="panel-head"><div><h3>Detection performance</h3><p>Evaluation metrics for the current model</p></div></div>
+          <div class="metric"><span>Precision</span><b>96.8%</b><div><i style="width:96.8%"></i></div></div>
+          <div class="metric"><span>Recall</span><b>93.4%</b><div><i style="width:93.4%"></i></div></div>
+          <div class="metric"><span>F1-score</span><b>95.1%</b><div><i style="width:95.1%"></i></div></div>
+          <div class="metric"><span>AUC-PR</span><b>94.7%</b><div><i style="width:94.7%"></i></div></div>
+        </section>
+
+        <section id="explainability" class="panel">
+          <div class="panel-head"><div><h3>Why was TXN-84A21 flagged?</h3><p>Explainable AI signal contribution</p></div><span class="badge high-badge">High risk</span></div>
+          <div class="explain">
+            <div class="factor"><span>Transaction velocity</span><b>+38%</b><div><i style="width:88%"></i></div></div>
+            <div class="factor"><span>Location deviation</span><b>+27%</b><div><i style="width:66%"></i></div></div>
+            <div class="factor"><span>Device fingerprint</span><b>+21%</b><div><i style="width:52%"></i></div></div>
+            <div class="factor"><span>Amount deviation</span><b>+14%</b><div><i style="width:36%"></i></div></div>
+          </div>
+          <div class="explain-note">The interface represents SHAP/LIME-style feature attribution for transparent review.</div>
+        </section>
+      </div>
+
+      <section id="models" class="panel model-panel">
+        <div class="panel-head"><div><h3>AI model pipeline</h3><p>From transaction ingestion to continuous learning</p></div></div>
+        <div class="pipeline">
+          <div><span>01</span><b>Ingest</b><small>Live transactions</small></div><strong>→</strong>
+          <div><span>02</span><b>Engineer</b><small>Behavioral features</small></div><strong>→</strong>
+          <div><span>03</span><b>Score</b><small>ML risk prediction</small></div><strong>→</strong>
+          <div><span>04</span><b>Explain</b><small>SHAP / LIME</small></div><strong>→</strong>
+          <div><span>05</span><b>Learn</b><small>Periodic retraining</small></div>
+        </div>
+      </section>
+    </section>
+    <footer>AI Fraud Detection Platform · Demo interface · No real banking or customer data</footer>
+  </main>
+  <script src="script.js"></script>
+</body>
+</html>

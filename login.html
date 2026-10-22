@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en" id="loginRoot">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SecureBank | Admin Login</title>
+  <meta name="description" content="SecureBank admin login portal for fraud detection dashboard access.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="login.css">
+</head>
+<body>
+
+  <!-- Animated background orbs -->
+  <div class="bg-orbs" aria-hidden="true">
+    <div class="orb orb1"></div>
+    <div class="orb orb2"></div>
+    <div class="orb orb3"></div>
+  </div>
+
+  <!-- Grid overlay -->
+  <div class="bg-grid" aria-hidden="true"></div>
+
+  <main class="login-wrap">
+
+    <!-- Left panel — branding -->
+    <aside class="login-brand" aria-label="SecureBank brand info">
+      <div class="brand-logo">
+        <div class="brand-mark">S</div>
+        <span>SecureBank</span>
+      </div>
+      <h1>AI-Powered<br>Fraud Intelligence</h1>
+      <p>Real-time transaction scoring, explainable risk decisions, and continuous model learning — all in one place.</p>
+
+      <ul class="feature-list" aria-label="Platform features">
+        <li>
+          <div class="feat-icon">🛡️</div>
+          <div>
+            <b>Real-time Protection</b>
+            <small>Sub-50ms transaction scoring</small>
+          </div>
+        </li>
+        <li>
+          <div class="feat-icon">🤖</div>
+          <div>
+            <b>AI Risk Analysis</b>
+            <small>XGBoost + SHAP explainability</small>
+          </div>
+        </li>
+        <li>
+          <div class="feat-icon">📊</div>
+          <div>
+            <b>Live Dashboard</b>
+            <small>Velocity, location, device signals</small>
+          </div>
+        </li>
+      </ul>
+
+      <div class="brand-stat-row" aria-label="Platform statistics">
+        <div class="brand-stat"><strong>96.8%</strong><span>Precision</span></div>
+        <div class="brand-stat"><strong>42ms</strong><span>Avg. Score Time</span></div>
+        <div class="brand-stat"><strong>128K+</strong><span>Transactions/day</span></div>
+      </div>
+    </aside>
+
+    <!-- Right panel — login form -->
+    <section class="login-card" aria-label="Admin login form">
+
+      <!-- Theme toggle -->
+      <button class="theme-toggle-login" id="themeToggleLogin" aria-label="Toggle dark/light mode" title="Toggle theme">
+        <span class="tl-sun">☀️</span>
+        <span class="tl-moon">🌙</span>
+      </button>
+
+      <div class="card-inner">
+        <div class="card-badge">ADMIN ACCESS</div>
+        <h2>Welcome back</h2>
+        <p class="card-sub">Sign in to your administrator account to access the fraud detection center.</p>
+
+        <!-- Alert box (shown on error) -->
+        <div class="alert-box" id="alertBox" role="alert" aria-live="polite"></div>
+
+        <form id="loginForm" novalidate autocomplete="off">
+
+          <div class="field-group" id="userGroup">
+            <label for="username">Username</label>
+            <div class="input-wrap">
+              <span class="input-icon">👤</span>
+              <input
+                type="text"
+                id="username"
+                name="username"
+                placeholder="Enter admin username"
+                autocomplete="username"
+                spellcheck="false"
+                aria-required="true"
+              >
+            </div>
+            <div class="field-error" id="userError"></div>
+          </div>
+
+          <div class="field-group" id="passGroup">
+            <label for="password">Password</label>
+            <div class="input-wrap">
+              <span class="input-icon">🔒</span>
+              <input
+                type="password"
+                id="password"
+                name="password"
+                placeholder="Enter your password"
+                autocomplete="current-password"
+                aria-required="true"
+              >
+              <button type="button" class="eye-btn" id="eyeBtn" aria-label="Show/hide password">👁</button>
+            </div>
+            <div class="field-error" id="passError"></div>
+          </div>
+
+          <div class="remember-row">
+            <label class="check-label">
+              <input type="checkbox" id="rememberMe"> Keep me signed in
+            </label>
+          </div>
+
+          <button type="submit" class="login-btn" id="loginBtn">
+            <span class="btn-text">Sign in to Dashboard</span>
+            <span class="btn-spinner" aria-hidden="true"></span>
+          </button>
+
+        </form>
+
+        <div class="hint-box">
+          <span>🔐</span>
+          <span>Admin credentials required. Contact your system administrator if you need access.</span>
+        </div>
+      </div>
+
+      <footer class="card-footer">
+        SecureBank Fraud Intelligence Platform · v1.0.0 · Demo Environment
+      </footer>
+    </section>
+
+  </main>
+
+  <script src="login.js"></script>
+</body>
+</html>
