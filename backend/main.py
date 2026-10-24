@@ -18,7 +18,7 @@ from typing import Optional, List
 import pandas as pd
 from fastapi import FastAPI, Depends, File, UploadFile, Query, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import JSONResponse, FileResponse
+from fastapi.staticfiles import StaticFiles
 from sqlalchemy.orm import Session
 from dotenv import load_dotenv
 
@@ -272,7 +272,7 @@ def model_metrics():
 @app.post("/api/agent/chat", response_model=schemas.AgentChatResponse, tags=["AI Agent"])
 def agent_chat(req: schemas.AgentChatRequest, db: Session = Depends(get_db)):
     """
-    Chat with the Gemini-powered Fraud Analyst Assistant.
+    Chat with the Groq-powered Fraud Analyst Assistant.
 
     Sample curl:
 
@@ -324,3 +324,10 @@ def get_alerts(
         resolved=bool(a.resolved),
         created_at=a.created_at.isoformat() if a.created_at else "",
     ) for a in alerts]
+
+
+# Mount frontend static files and UI pages
+FRONTEND_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
+if os.path.isdir(FRONTEND_DIR):
+    app.mount("/", StaticFiles(directory=FRONTEND_DIR, html=True), name="frontend")
+

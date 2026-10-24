@@ -8,7 +8,13 @@ from sqlalchemy import (create_engine, Column, Integer, Float, String,
 from sqlalchemy.orm import declarative_base, sessionmaker
 
 # Engine setup
-DATABASE_URL = os.getenv("DATABASE_URL", "sqlite:///./fraud.db")
+DEFAULT_DB_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), "fraud.db").replace("\\", "/")
+DATABASE_URL = os.getenv("DATABASE_URL", f"sqlite:///{DEFAULT_DB_PATH}")
+if DATABASE_URL.startswith("sqlite:///./"):
+    rel_name = DATABASE_URL[12:]
+    abs_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), rel_name).replace("\\", "/")
+    DATABASE_URL = f"sqlite:///{abs_path}"
+
 engine       = create_engine(DATABASE_URL, connect_args={"check_same_thread": False})
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 Base         = declarative_base()
